@@ -1,32 +1,33 @@
-<div>Teachable Machine Image Model</div>
-<div class="container mt-5 pt-5">
-    <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
-            <form action="">
-                <div class="avatar-upload">
-                    <div class="avatar-preview">
-                        <div>
-                            <button class="btn" type="button" onclick="removeImgSrc(this)" id="removeBtn" style="display: none;">x</button>
-                            <img src="" id="imagePreview" alt="">
-                            <div class="text-danger small" id="maxAlert"></div>
-                            <div id="fileinfo">
-                                <div id="filename"></div>
-                                <div id="fileSize"></div>
-                                <div id="fileMemorySize"></div>
+<div class="wrapper">
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <form action="">
+                    <div class="avatar-upload">
+                        <div class="avatar-preview">
+                            <div>
+                                <button class="btn" type="button" onclick="removeImgSrc(this)" id="removeBtn" style="display: none;">x</button>
+                                <img src="" id="imagePreview" alt="">
+                                <div class="text-danger small" id="maxAlert"></div>
+                                <div id="fileinfo">
+                                    <div id="filename"></div>
+                                    <div id="fileSize"></div>
+                                    <div id="fileMemorySize"></div>
+                                </div>
                             </div>
                         </div>
+                        <div class="avatar-edit text-center" id="avatar-edit">
+                            <input type='file' id="imageUpload" accept=".png, .jpeg, .jpg" onchange="changePreview(this)" name="imagename" />
+                            <label for="imageUpload"> 업로드해서 예측하기  <small>(Max 600KB)</small></label>
+                        </div>
                     </div>
-                    <div class="avatar-edit text-center" id="avatar-edit">
-                        <input type='file' id="imageUpload" accept=".png, .jpeg, .jpg" onchange="changePreview(this)" name="imagename" />
-                        <label for="imageUpload"> 업로드해서 예측하기  <small>(Max 600KB)</small></label>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
+    <div id="label-container"></div>
 </div>
-<div id="label-container"></div>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 <script>
@@ -35,22 +36,22 @@
         let maxImgSize = 1024 * 600;
         if (path.files && path.files[0]) {
             if (path.files[0].size < maxImgSize) {
-            //alert(maxImgSize + " - " + path.files[0].size);
-            let reader = new FileReader();
-            reader.onload = function(b) {
-                imagePreview.src = b.target.result;
-                //alert(imagePreview.src);
-                getID("filename").innerHTML = path.files[0].name;
-                getID("fileMemorySize").innerHTML = bytesToSize(path.files[0].size);
-                getID("maxAlert").innerHTML = "";
-            };
-            reader.readAsDataURL(path.files[0]);
-            getID("removeBtn").style.display = "block";
-            getID("fileinfo").style.display = "block";
-            getID("avatar-edit").style.display = "none";
+                //alert(maxImgSize + " - " + path.files[0].size);
+                let reader = new FileReader();
+                reader.onload = function(b) {
+                    imagePreview.src = b.target.result;
+                    //alert(imagePreview.src);
+                    getID("filename").innerHTML = path.files[0].name;
+                    getID("fileMemorySize").innerHTML = bytesToSize(path.files[0].size);
+                    getID("maxAlert").innerHTML = "";
+                };
+                reader.readAsDataURL(path.files[0]);
+                getID("removeBtn").style.display = "block";
+                getID("fileinfo").style.display = "block";
+                getID("avatar-edit").style.display = "none";
             } else {
-            //alert("Large file size");
-            getID("maxAlert").innerHTML =bytesToSize(path.files[0].size) + " Not allowed";
+                //alert("Large file size");
+                getID("maxAlert").innerHTML =bytesToSize(path.files[0].size) + " Not allowed";
             }
         }
     }
@@ -120,9 +121,17 @@
 </script>
 
 <style>
+    #label-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
     .avatar-upload {
-        position: relative;
-        max-width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
     }
     .avatar-upload .avatar-edit {
         right: 12px;
