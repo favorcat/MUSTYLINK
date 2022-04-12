@@ -58,10 +58,12 @@
 
     // remove image src onclick
     function removeImgSrc(btn) {
-            getID("imageUpload").value = getID("imagePreview").src = getID("filename").innerHTML = getID("fileSize").innerHTML = getID("fileMemorySize").innerHTML = "";
-            getID("avatar-edit").style.display = "block";
-            getID("fileinfo").style.display = "none";
-            btn.style.display = "none";
+        getID("imagePreview").style.display = "none";
+        getID("imageUpload").value = getID("imagePreview").src = getID("filename").innerHTML = getID("fileSize").innerHTML = getID("fileMemorySize").innerHTML = "";
+        getID("avatar-edit").style.display = "block";
+        getID("fileinfo").style.display = "none";
+        btn.style.display = "none";
+        getID("label-container").style.display = "none";
         }
 
     function getID(id) {
@@ -82,19 +84,18 @@
         maxPredictions = model.getTotalClasses();
 
         labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) { // and class labels
-            labelContainer.appendChild(document.createElement("div"));
-        }
     }
 
     async function predict() {
         var image = document.getElementById('imagePreview');
         const prediction = await model.predict(image, false);
+        const arr = [];
+        arr.length = maxPredictions;
         for (let i = 0; i < maxPredictions; i++) {
-            const classPrediction =
-                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-            labelContainer.childNodes[i].innerHTML = classPrediction;
+            arr[i] = prediction[i].probability.toFixed(2) * 100;
         }
+        idx = arr.indexOf(Math.max.apply(null,arr));
+        labelContainer.innerHTML = prediction[idx].className;
     }
 </script>
 
@@ -121,11 +122,21 @@
 </script>
 
 <style>
+    .wrapper{
+        display:flex;
+        flex-direction: column;
+        padding: 5%;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
     #label-container{
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+    }
+    #imagePreview{
+        display:none;
     }
     .avatar-upload {
         display: flex;
@@ -162,16 +173,18 @@
         padding: 5px 10px;
     }
     #removeBtn {
-        position: absolute;
-        right: 10px;
-        top: 10px;
+        margin-left: 99%;
+        margin-bottom: 20px;
         border-radius: 50%;
         height: 28px;
         width: 28px;
         line-height: 1;
-        padding: 0;
         display: none;
         background: rgba(255, 255, 255, 0.85);
         color: #000;
+    }
+
+    #label-container {
+        font-size: x-large;
     }
 </style>
