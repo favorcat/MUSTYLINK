@@ -56,7 +56,7 @@ const state = reactive({
   progress: 0,
   loading: false,
 })
-const URL = 'https://teachablemachine.withgoogle.com/models/HPPjII80T/';
+const URL = 'https://teachablemachine.withgoogle.com/models/XPw5FPKAW/';
 const modelURL = URL + "model.json";
 const metadataURL = URL + "metadata.json";
 let model, webcam, maxPredictions, loadedData;
